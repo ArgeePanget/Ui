@@ -1,8 +1,5 @@
 --[[
-  UI lib made by bungie#0001
-  
-  - Please do not use this without permission, I am working really hard on this UI to make it perfect and do not have a big 
-    problem with other people using it, please just make sure you message me and ask me before using.
+  UI lib modified by glxckdev, ASK PERMISSION TO OWNER IF YOUR GONNA USE THIS UI LIBRARY
 ]]
 
 -- / Locals
@@ -42,9 +39,9 @@ local drag = function(obj, latency)
     obj = obj
     latency = latency or 0.06
 
-    toggled = nil
-    input = nil
-    start = nil
+    local toggled = false
+    local input = nil
+    local start = nil
 
     function updateInput(input)
         local Delta = input.Position - start
@@ -53,12 +50,12 @@ local drag = function(obj, latency)
     end
 
     obj.InputBegan:Connect(function(inp)
-        if (inp.UserInputType == Enum.UserInputType.MouseButton1) then
+        if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
             toggled = true
             start = inp.Position
             startPos = obj.Position
             inp.Changed:Connect(function()
-                if (inp.UserInputState == Enum.UserInputState.End) then
+                if inp.UserInputState == Enum.UserInputState.End then
                     toggled = false
                 end
             end)
@@ -66,13 +63,13 @@ local drag = function(obj, latency)
     end)
 
     obj.InputChanged:Connect(function(inp)
-        if (inp.UserInputType == Enum.UserInputType.MouseMovement) then
+        if inp.UserInputType == Enum.UserInputType.MouseMovement or inp.UserInputType == Enum.UserInputType.Touch then
             input = inp
         end
     end)
 
     UserInputService.InputChanged:Connect(function(inp)
-        if (inp == input and toggled) then
+        if inp == input and toggled then
             updateInput(inp)
         end
     end)
